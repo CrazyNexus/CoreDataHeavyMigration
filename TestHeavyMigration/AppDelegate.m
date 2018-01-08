@@ -46,6 +46,7 @@
    // https://stackoverflow.com/questions/5995231/example-or-explanation-of-core-data-migration-with-multiple-passes/6103486#6103486
    // https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/CoreDataVersioning/Articles/vmCustomizing.html#//apple_ref/doc/uid/TP40004399-CH8-SW1
    // Code example:
+   // http://williamboles.me/step-by-step-core-data-migration/
    // https://github.com/wibosco/CoreDataMigration-Example
 
    return YES;

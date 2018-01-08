@@ -39,19 +39,23 @@
 
 
 - (void)insertNewObject:(id)sender {
-   NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
-   Event *newEvent = [[Event alloc] initWithContext:context];
-       
-   // If appropriate, configure the new managed object.
-   newEvent.timestamp = [NSDate date];
-       
-   // Save the context.
-   NSError *error = nil;
-   if (![context save:&error]) {
-       // Replace this implementation with code to handle the error appropriately.
-       // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-       NSLog(@"Unresolved error %@, %@", error, error.userInfo);
-       abort();
+   if (self.fetchedResultsController.fetchedObjects == 0) {
+      for (int i = 0; i < 2000; i++) {
+         NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
+         Event *newEvent = [[Event alloc] initWithContext:context];
+         
+         // If appropriate, configure the new managed object.
+         newEvent.timestamp = [NSDate date];
+         
+         // Save the context.
+         NSError *error = nil;
+         if (![context save:&error]) {
+             // Replace this implementation with code to handle the error appropriately.
+             // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+             NSLog(@"Unresolved error %@, %@", error, error.userInfo);
+             abort();
+         }
+      }
    }
 }
 

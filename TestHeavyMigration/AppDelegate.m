@@ -12,21 +12,42 @@
 
 @interface AppDelegate () <UISplitViewControllerDelegate>
 
+@property (nonnull, atomic) UISplitViewController *splitViewController;
+
 @end
 
 @implementation AppDelegate
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-   // Override point for customization after application launch.
-   UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
-   UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
-   navigationController.topViewController.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem;
-   splitViewController.delegate = self;
-
-   UINavigationController *masterNavigationController = splitViewController.viewControllers[0];
+   // Initialize the main Storyboard and remember it
+   self.splitViewController = (UISplitViewController *)self.window.rootViewController;
+   UINavigationController *navigationController = [self.splitViewController.viewControllers lastObject];
+   navigationController.topViewController.navigationItem.leftBarButtonItem = self.splitViewController.displayModeButtonItem;
+   self.splitViewController.delegate = self;
+   
+   UINavigationController *masterNavigationController = self.splitViewController.viewControllers[0];
    MasterViewController *controller = (MasterViewController *)masterNavigationController.topViewController;
    controller.managedObjectContext = self.persistentContainer.viewContext;
+   
+   // show AppLoading Scene
+   UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"AppLoading" bundle:[NSBundle mainBundle]];
+   UIViewController *viewController = [mainStoryboard instantiateInitialViewController];
+   self.window.rootViewController = viewController;
+   
+   // show th eright stuff after 5 seconds for testing
+   double delayInSec = 5.0;
+   dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSec * NSEC_PER_SEC);
+   dispatch_after(popTime, dispatch_get_main_queue(), ^{
+      [self presentMainUI];
+   });
+   
+   // web pages helping to solve the issue:
+   // https://stackoverflow.com/questions/5995231/example-or-explanation-of-core-data-migration-with-multiple-passes/6103486#6103486
+   // https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/CoreDataVersioning/Articles/vmCustomizing.html#//apple_ref/doc/uid/TP40004399-CH8-SW1
+   // Code example:
+   // https://github.com/wibosco/CoreDataMigration-Example
+
    return YES;
 }
 
@@ -59,6 +80,14 @@
    [self saveContext];
 }
 
+#pragma mark - Main
+
+-(void)presentMainUI {
+
+   self.window.rootViewController = self.splitViewController;
+   NSLog(@"present the stuff ...");
+
+}
 
 #pragma mark - Split view
 
@@ -80,7 +109,12 @@
     @synchronized (self) {
         if (_persistentContainer == nil) {
             _persistentContainer = [[NSPersistentContainer alloc] initWithName:@"TestHeavyMigration"];
+           
+           [_persistentContainer.persistentStoreDescriptions firstObject].shouldInferMappingModelAutomatically = NO;
+           
             [_persistentContainer loadPersistentStoresWithCompletionHandler:^(NSPersistentStoreDescription *storeDescription, NSError *error) {
+               storeDescription.shouldInferMappingModelAutomatically = YES;
+               
                 if (error != nil) {
                     // Replace this implementation with code to handle the error appropriately.
                     // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.

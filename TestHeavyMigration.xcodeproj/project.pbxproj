@@ -15,6 +15,9 @@
 		E97F2991200006AD00298C0D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E97F2990200006AD00298C0D /* Assets.xcassets */; };
 		E97F2994200006AD00298C0D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E97F2992200006AD00298C0D /* LaunchScreen.storyboard */; };
 		E97F2997200006AD00298C0D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E97F2996200006AD00298C0D /* main.m */; };
+		E97F299F20000BE000298C0D /* ManualModel.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = E97F299E20000BE000298C0D /* ManualModel.xcmappingmodel */; };
+		E97F29A520000D3900298C0D /* StepOneEntityMigrationPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = E97F29A420000D3900298C0D /* StepOneEntityMigrationPolicy.m */; };
+		E97F29A720002D1400298C0D /* AppLoading.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E97F29A620002D1400298C0D /* AppLoading.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +34,11 @@
 		E97F2993200006AD00298C0D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E97F2995200006AD00298C0D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E97F2996200006AD00298C0D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		E97F299D20000A8200298C0D /* TestHeavyMigration2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TestHeavyMigration2.xcdatamodel; sourceTree = "<group>"; };
+		E97F299E20000BE000298C0D /* ManualModel.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = ManualModel.xcmappingmodel; sourceTree = "<group>"; };
+		E97F29A320000D3900298C0D /* StepOneEntityMigrationPolicy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StepOneEntityMigrationPolicy.h; sourceTree = "<group>"; };
+		E97F29A420000D3900298C0D /* StepOneEntityMigrationPolicy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StepOneEntityMigrationPolicy.m; sourceTree = "<group>"; };
+		E97F29A620002D1400298C0D /* AppLoading.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AppLoading.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +83,10 @@
 				E97F2995200006AD00298C0D /* Info.plist */,
 				E97F2996200006AD00298C0D /* main.m */,
 				E97F2984200006AD00298C0D /* TestHeavyMigration.xcdatamodeld */,
+				E97F299E20000BE000298C0D /* ManualModel.xcmappingmodel */,
+				E97F29A320000D3900298C0D /* StepOneEntityMigrationPolicy.h */,
+				E97F29A420000D3900298C0D /* StepOneEntityMigrationPolicy.m */,
+				E97F29A620002D1400298C0D /* AppLoading.storyboard */,
 			);
 			path = TestHeavyMigration;
 			sourceTree = "<group>";
@@ -140,6 +152,7 @@
 				E97F2994200006AD00298C0D /* LaunchScreen.storyboard in Resources */,
 				E97F2991200006AD00298C0D /* Assets.xcassets in Resources */,
 				E97F298F200006AD00298C0D /* Main.storyboard in Resources */,
+				E97F29A720002D1400298C0D /* AppLoading.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -151,7 +164,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				E97F2997200006AD00298C0D /* main.m in Sources */,
+				E97F299F20000BE000298C0D /* ManualModel.xcmappingmodel in Sources */,
 				E97F2986200006AD00298C0D /* TestHeavyMigration.xcdatamodeld in Sources */,
+				E97F29A520000D3900298C0D /* StepOneEntityMigrationPolicy.m in Sources */,
 				E97F2989200006AD00298C0D /* MasterViewController.m in Sources */,
 				E97F2983200006AD00298C0D /* AppDelegate.m in Sources */,
 				E97F298C200006AD00298C0D /* DetailViewController.m in Sources */,
@@ -339,11 +354,13 @@
 		E97F2984200006AD00298C0D /* TestHeavyMigration.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				E97F299D20000A8200298C0D /* TestHeavyMigration2.xcdatamodel */,
 				E97F2985200006AD00298C0D /* TestHeavyMigration.xcdatamodel */,
 			);
 			currentVersion = E97F2985200006AD00298C0D /* TestHeavyMigration.xcdatamodel */;
 			path = TestHeavyMigration.xcdatamodeld;
 			sourceTree = "<group>";
+			usesTabs = 0;
 			versionGroupType = wrapper.xcdatamodel;
 		};
 /* End XCVersionGroup section */

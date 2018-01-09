@@ -39,7 +39,7 @@
 
 
 - (void)insertNewObject:(id)sender {
-   if (self.fetchedResultsController.fetchedObjects == 0) {
+   if ([self.fetchedResultsController.fetchedObjects count] == 0) {
       for (int i = 0; i < 2000; i++) {
          NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
          Event *newEvent = [[Event alloc] initWithContext:context];

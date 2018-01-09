@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "DetailViewController.h"
 #import "MasterViewController.h"
+#import "CoreDataManager.h"
 
 @interface AppDelegate () <UISplitViewControllerDelegate>
 
@@ -35,12 +36,19 @@
    UIViewController *viewController = [mainStoryboard instantiateInitialViewController];
    self.window.rootViewController = viewController;
    
+   CoreDataManager *manager = [CoreDataManager shared:self];
+   [manager migrateStoreIfNeeded:^{
+      NSLog(@"Do the needful completion stuff here!");
+   }];
+   
+   
    // show th eright stuff after 5 seconds for testing
    double delayInSec = 5.0;
    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSec * NSEC_PER_SEC);
    dispatch_after(popTime, dispatch_get_main_queue(), ^{
       [self presentMainUI];
    });
+   
    
    // web pages helping to solve the issue:
    // https://stackoverflow.com/questions/5995231/example-or-explanation-of-core-data-migration-with-multiple-passes/6103486#6103486
@@ -112,6 +120,7 @@
             _persistentContainer = [[NSPersistentContainer alloc] initWithName:@"TestHeavyMigration"];
            
            [_persistentContainer.persistentStoreDescriptions firstObject].shouldInferMappingModelAutomatically = NO;
+           [_persistentContainer.persistentStoreDescriptions firstObject].shouldMigrateStoreAutomatically = NO;
            
             [_persistentContainer loadPersistentStoresWithCompletionHandler:^(NSPersistentStoreDescription *storeDescription, NSError *error) {
                storeDescription.shouldInferMappingModelAutomatically = YES;
@@ -129,7 +138,7 @@
                      Check the error message to determine what the actual problem was.
                     */
                     NSLog(@"Unresolved error %@, %@", error, error.userInfo);
-                    abort();
+                    //abort();
                 }
             }];
         }

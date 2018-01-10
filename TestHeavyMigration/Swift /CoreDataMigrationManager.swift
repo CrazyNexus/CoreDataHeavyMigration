@@ -29,72 +29,76 @@ class CoreDataMigrator {
    
    // MARK: - Check
    
-   func requiresMigration(at storeURL: URL, currentMigrationModel: CoreDataMigrationModel = CoreDataMigrationModel.current) -> Bool {
-      guard let metadata = NSPersistentStoreCoordinator.metadata(at: storeURL) else {
-         return false
-      }
-      
-      return !currentMigrationModel.managedObjectModel().isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata)
-   }
-   
-   // MARK: - Migration
-   
-   func migrateStore(at storeURL: URL) {
-      migrateStore(from: storeURL, to: storeURL, targetVersion: CoreDataMigrationModel.current)
-   }
-   
-   func migrateStore(from sourceURL: URL, to targetURL: URL, targetVersion: CoreDataMigrationModel) {
-      guard let sourceMigrationModel = CoreDataMigrationSourceModel(storeURL: sourceURL as URL) else {
-         fatalError("unknown store version at URL \(sourceURL)")
-      }
-      
-      forceWALCheckpointingForStore(at: sourceURL)
-      
-      var currentURL = sourceURL
-      let migrationSteps = sourceMigrationModel.migrationSteps(to: targetVersion)
-      
-      for step in migrationSteps {
-         let manager = NSMigrationManager(sourceModel: step.source, destinationModel: step.destination)
-         let destinationURL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true).appendingPathComponent(UUID().uuidString)
-         
-         do {
-            try manager.migrateStore(from: currentURL, sourceType: NSSQLiteStoreType, options: nil, with: step.mapping, toDestinationURL: destinationURL, destinationType: NSSQLiteStoreType, destinationOptions: nil)
-         } catch let error {
-            fatalError("failed attempting to migrate from \(step.source) to \(step.destination), error: \(error)")
-         }
-         
-         if currentURL != sourceURL {
-            //Destroy intermediate step's store
-            NSPersistentStoreCoordinator.destroyStore(at: currentURL)
-         }
-         
-         currentURL = destinationURL
-      }
-      
-      NSPersistentStoreCoordinator.replaceStore(at: targetURL, withStoreAt: currentURL)
-      
-      if (currentURL != sourceURL) {
-         NSPersistentStoreCoordinator.destroyStore(at: currentURL)
-      }
-   }
-   
-   // MARK: - WAL
-   
-   func forceWALCheckpointingForStore(at storeURL: URL) {
-      guard let metadata = NSPersistentStoreCoordinator.metadata(at: storeURL), let migrationModel = CoreDataMigrationModel.migrationModelCompatibleWithStoreMetadata(metadata)  else {
-         return
-      }
-      
-      do {
-         let model = migrationModel.managedObjectModel()
-         let persistentStoreCoordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
-         
-         let options = [NSSQLitePragmasOption: ["journal_mode": "DELETE"]]
-         let store = persistentStoreCoordinator.addPersistentStore(at: storeURL, options: options)
-         try persistentStoreCoordinator.remove(store)
-      } catch let error {
-         fatalError("failed to force WAL checkpointing, error: \(error)")
-      }
-   }
+//   func requiresMigration(at storeURL: URL, currentMigrationModel: CoreDataMigrationModel = CoreDataMigrationModel.current) -> Bool {
+//      //guard let metadata = NSPersistentStoreCoordinator.metmetadata(at: storeURL) else {
+//      var metadata: [String : Any]
+//      do {
+//         metadata = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: storeURL)
+//      } catch {
+//         print("Fuck an error!")
+//      }
+//
+//      return !currentMigrationModel.managedObjectModel().isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata)
+//   }
+//
+//   // MARK: - Migration
+//
+//   func migrateStore(at storeURL: URL) {
+//      migrateStore(from: storeURL, to: storeURL, targetVersion: CoreDataMigrationModel.current)
+//   }
+//
+//   func migrateStore(from sourceURL: URL, to targetURL: URL, targetVersion: CoreDataMigrationModel) {
+//      guard let sourceMigrationModel = CoreDataMigrationSourceModel(storeURL: sourceURL as URL) else {
+//         fatalError("unknown store version at URL \(sourceURL)")
+//      }
+//
+//      forceWALCheckpointingForStore(at: sourceURL)
+//
+//      var currentURL = sourceURL
+//      let migrationSteps = sourceMigrationModel.migrationSteps(to: targetVersion)
+//
+//      for step in migrationSteps {
+//         let manager = NSMigrationManager(sourceModel: step.source, destinationModel: step.destination)
+//         let destinationURL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true).appendingPathComponent(UUID().uuidString)
+//
+//         do {
+//            try manager.migrateStore(from: currentURL, sourceType: NSSQLiteStoreType, options: nil, with: step.mapping, toDestinationURL: destinationURL, destinationType: NSSQLiteStoreType, destinationOptions: nil)
+//         } catch let error {
+//            fatalError("failed attempting to migrate from \(step.source) to \(step.destination), error: \(error)")
+//         }
+//
+//         if currentURL != sourceURL {
+//            //Destroy intermediate step's store
+//            NSPersistentStoreCoordinator.destroyStore(at: currentURL)
+//         }
+//
+//         currentURL = destinationURL
+//      }
+//
+//      NSPersistentStoreCoordinator.replaceStore(at: targetURL, withStoreAt: currentURL)
+//
+//      if (currentURL != sourceURL) {
+//         NSPersistentStoreCoordinator.destroyStore(at: currentURL)
+//      }
+//   }
+//
+//   // MARK: - WAL
+//
+//   func forceWALCheckpointingForStore(at storeURL: URL) {
+//      guard let metadata = NSPersistentStoreCoordinator.metadata(at: storeURL), let migrationModel = CoreDataMigrationModel.migrationModelCompatibleWithStoreMetadata(metadata)  else {
+//         return
+//      }
+//
+//      do {
+//         let model = migrationModel.managedObjectModel()
+//         let persistentStoreCoordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
+//
+//         let options = [NSSQLitePragmasOption: ["journal_mode": "DELETE"]]
+//         let store = persistentStoreCoordinator.addPersistentStore(at: storeURL, options: options)
+//         try persistentStoreCoordinator.remove(store)
+//      } catch let error {
+//         fatalError("failed to force WAL checkpointing, error: \(error)")
+//      }
+//   }
 }
 

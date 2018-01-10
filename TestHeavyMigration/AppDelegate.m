@@ -29,25 +29,37 @@
    
    UINavigationController *masterNavigationController = self.splitViewController.viewControllers[0];
    MasterViewController *controller = (MasterViewController *)masterNavigationController.topViewController;
-   controller.managedObjectContext = self.persistentContainer.viewContext;
    
    // show AppLoading Scene
    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"AppLoading" bundle:[NSBundle mainBundle]];
    UIViewController *viewController = [mainStoryboard instantiateInitialViewController];
    self.window.rootViewController = viewController;
    
-   CoreDataManager *manager = [CoreDataManager shared:self];
-   [manager migrateStoreIfNeeded:^{
-      NSLog(@"Do the needful completion stuff here!");
-   }];
+//   CoreDataManager *manager = [CoreDataManager shared:self];
+//   [manager migrateStoreIfNeeded:^{
+//      NSLog(@"Do the needful completion stuff here!");
+//   }];
    
-   
-   // show th eright stuff after 5 seconds for testing
-   double delayInSec = 5.0;
-   dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSec * NSEC_PER_SEC);
-   dispatch_after(popTime, dispatch_get_main_queue(), ^{
-      [self presentMainUI];
+   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+      // task im backgroud executed
+      NSLog(@"Background Task");
+      
+      controller.managedObjectContext = self.persistentContainer.viewContext;
+      
+      dispatch_async(dispatch_get_main_queue(), ^{
+         NSLog(@"Zurück im Main Thread");
+         [self presentMainUI];
+         [controller.tableView reloadData];
+      });
    });
+   
+   
+//   // show th eright stuff after 5 seconds for testing
+//   double delayInSec = 5.0;
+//   dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSec * NSEC_PER_SEC);
+//   dispatch_after(popTime, dispatch_get_main_queue(), ^{
+//      [self presentMainUI];
+//   });
    
    
    // web pages helping to solve the issue:
@@ -120,7 +132,10 @@
             _persistentContainer = [[NSPersistentContainer alloc] initWithName:@"TestHeavyMigration"];
            
            [_persistentContainer.persistentStoreDescriptions firstObject].shouldInferMappingModelAutomatically = NO;
-           [_persistentContainer.persistentStoreDescriptions firstObject].shouldMigrateStoreAutomatically = NO;
+           //[_persistentContainer.persistentStoreDescriptions firstObject].shouldMigrateStoreAutomatically = NO;
+           
+           NSURL *dbURL = [_persistentContainer.persistentStoreDescriptions firstObject].URL;
+           NSLog(@"%@", [dbURL absoluteString]);
            
             [_persistentContainer loadPersistentStoresWithCompletionHandler:^(NSPersistentStoreDescription *storeDescription, NSError *error) {
                storeDescription.shouldInferMappingModelAutomatically = YES;

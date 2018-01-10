@@ -393,7 +393,7 @@
 				E97F299D20000A8200298C0D /* TestHeavyMigration2.xcdatamodel */,
 				E97F2985200006AD00298C0D /* TestHeavyMigration.xcdatamodel */,
 			);
-			currentVersion = E97F2985200006AD00298C0D /* TestHeavyMigration.xcdatamodel */;
+			currentVersion = E97F299D20000A8200298C0D /* TestHeavyMigration2.xcdatamodel */;
 			path = TestHeavyMigration.xcdatamodeld;
 			sourceTree = "<group>";
 			usesTabs = 0;

@@ -20,7 +20,7 @@
                                                               inManagedObjectContext:[manager destinationContext]];
    
    // do your transfer of NSDate to NSString
-   NSDate *date = [sInstance valueForKey:@"timeStamp"];
+   NSDate *date = [sInstance valueForKey:@"timestamp"];
    
    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
    [formatter setTimeStyle:NSDateFormatterMediumStyle];
@@ -30,6 +30,8 @@
    [newObject setValue:[formatter stringFromDate:date] forKey:@"printedDate"];
    
    [manager associateSourceInstance:sInstance withDestinationInstance:newObject forEntityMapping:mapping];
+   
+   NSLog(@"Datensatz migriert");
    
    return YES;
 }
